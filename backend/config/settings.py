@@ -15,20 +15,23 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # Сторонние библиотеки
+    
     'rest_framework',
-    'rest_framework_simplejwt',
+    'rest_framework.authtoken',
     'corsheaders',
 
-    # Наши приложения
-    'apps.users', 
+    # Ваши приложения
+    'apps.users',  # (или просто 'users', как у вас настроено)
+    'tweets',
+    'chat',        # <--- ВОТ ЭТА СТРОКА ОБЯЗАТЕЛЬНА
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware', # CORS должен быть высоко
+    
+    'corsheaders.middleware.CorsMiddleware',  # <--- ДОБАВИТЬ СЮДА (перед CommonMiddleware)
+    
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -59,10 +62,10 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'twitter_db'),
-        'USER': os.environ.get('DB_USER', 'postgres'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'postgres'),
-        'HOST': os.environ.get('DB_HOST', 'db'),
+        'NAME': 'tw',         # <--- Имя базы
+        'USER': 'tw',         # <--- Пользователь
+        'PASSWORD': 'tw',     # <--- Пароль
+        'HOST': 'db',         # ВАЖНО: Хост остается 'db', так как это имя сервиса в docker-compose!
         'PORT': '5432',
     }
 }
@@ -94,3 +97,13 @@ SIMPLE_JWT = {
 }
 
 CORS_ALLOW_ALL_ORIGINS = True # Разрешаем запросы с любого фронтенда (для dev режима)
+# Разрешаем запросы с адреса, где работает Vue
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
+# Разрешаем отправку куки и заголовков авторизации
+CORS_ALLOW_CREDENTIALS = True
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

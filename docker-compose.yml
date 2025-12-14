@@ -7,9 +7,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=twitter_db
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=tw
+      - POSTGRES_USER=tw
+      - POSTGRES_PASSWORD=tw
     ports:
       - "5432:5432"
 
@@ -26,9 +26,9 @@ services:
     depends_on:
       - db
     environment:
-      - DB_NAME=twitter_db
-      - DB_USER=postgres
-      - DB_PASSWORD=postgres
+      - DB_NAME=tw            # <--- Меняем и тут, чтобы бэкенд знал
+      - DB_USER=tw
+      - DB_PASSWORD=tw
       - DB_HOST=db
 
 volumes:
